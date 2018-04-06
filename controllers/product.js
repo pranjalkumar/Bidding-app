@@ -1,7 +1,7 @@
 'use strict';
 var mongoose=require('mongoose');
 var Products=require('../models/product').Products;
-var Orders=require('../models/order').Orders;
+
 
 
 exports.getProduct= function (req,res) {
@@ -94,60 +94,4 @@ exports.deleteProduct= function (req,res) {
             message: 'Product deleted'
         });}
     })
-};
-
-
-exports.getOrder= function (req,res) {
-    Orders.find({},function (err,result) {
-        if(err){
-            res.status(500).json({
-                success:false,
-                message: 'sorry! No result avaiable'
-            });
-        }
-        else
-        {res.status(200).json({
-            success: true,
-            data:result
-        });}
-    });
-};
-
-
-exports.addOrder= function (req,res) {
-    Products.findById(req.body.productId,function (err,data) {
-       if(err){
-           res.status(500).json({
-               success:false,
-               message:"sorry!!Something happened"
-           });
-       }
-       if(data)
-       {
-           var order= new Orders({
-               _id: new mongoose.Types.ObjectId(),
-               product: req.body.productId,
-               quantity:req.body.quantity
-           });
-           order.save(function (err,result) {
-               if(err){
-                   res.status(500).json({
-                       success:false,
-                       message: 'sorry! something happened, please try again'
-                   });
-               }
-               else
-               {res.status(200).json({
-                   success: true,
-                   message: "Order added"
-               });}
-           });
-       }else{
-           res.status(404).json({
-               success:false,
-               message: 'sorry! something happened, please try again'
-           });
-       }
-
-    });
 };
