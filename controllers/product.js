@@ -22,10 +22,15 @@ exports.getProduct= function (req,res) {
 
 
 exports.addProduct= function (req,res) {
+    var username=req.userData.email;
+    var datetime = new Date();
     var product= new Products({
         _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
-        price:req.body.price
+        description: req.body.desc,
+        base_price: req.body.base_price,
+        owner: username,
+        upload_date: datetime
     });
     product.save(function (err,result) {
         if(err){
