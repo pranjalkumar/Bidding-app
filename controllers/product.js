@@ -22,6 +22,7 @@ exports.getProduct= function (req,res) {
 
 
 exports.addProduct= function (req,res) {
+    console.log(req.file);
     var username=req.userData.email;
     var datetime = new Date();
     var product= new Products({
@@ -29,6 +30,7 @@ exports.addProduct= function (req,res) {
         name: req.body.name,
         description: req.body.desc,
         base_price: req.body.base_price,
+        productImage: req.file.path,
         owner: username,
         upload_date: datetime
     });

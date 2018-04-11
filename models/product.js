@@ -5,6 +5,7 @@ var productSchema= mongoose.Schema({
     name: {type:String, required:true},
     description: {type:String,required:true},
     base_price: {type:Number, required:true},
+    productImage: {type:String, required:true},
     owner: {type:String, required:true},
     upload_date: {type:Date,required:true},
     sold_date: {type:Date},
