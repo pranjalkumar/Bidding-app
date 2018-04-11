@@ -1,4 +1,4 @@
 node_modules
-
-storage
-.idea
+/*
+storage/*
+.idea/*
