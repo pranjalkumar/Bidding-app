@@ -5,7 +5,9 @@ var userSchema= mongoose.Schema({
     email: {type:String, required:true, unique:true,
         match:/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/},
     password: {type:String, required:true},
-    aadhar: {type:String, required:true}
+    aadhar: {type:String, required:true},
+    verified : {type : Number , required:true},
+    verifytoken : {type : String, required:true}
 
 });
 
