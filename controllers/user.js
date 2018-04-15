@@ -9,8 +9,8 @@ const crypto = require('crypto');
 var smtpTransport = nodemailer.createTransport({
     service: "Gmail",
     auth: {
-        user: "tarun.bathwal@gmail.com",
-        pass: "bananashake"
+        user: "abc@email.com",
+        pass: "password"
     }
 });
 var rand,mailOptions,host,link;
