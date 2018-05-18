@@ -1,16 +1,23 @@
 'use strict';
-
+var users_count=0;
 
 
 
 var ioEvents = function(io) {
 
     io.on('connection', function (socket) {
-  socket.emit('news', { hello: 'world' });
-  socket.on('my other event', function (data) {
-    console.log(data);
+        users_count=users_count+1;
+        console.log(users_count);
+  // socket.on('my other event', function (data) {
+  //   console.log(data);
+  //       });
+
+  socket.on('disconnect',function (data) {
+            users_count--;
+            console.log(data);
         });
     });
+
 }
 
 

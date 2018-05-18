@@ -37,22 +37,17 @@
 </div>
 <script src="jquery.js"></script>
 
-<script>
-    $(document).ready(function(){
-
-    });
-
-
-
-</script>
 
 <script src="../socket.io/socket.io.js"></script>
 <script>
   var socket = io.connect('http://localhost:3000');
-  
-  socket.on('news', function (data) {
-    console.log(data);
-    socket.emit('my other event', { your: 'data' });
+
+//  socket.on('news', function (data) {
+//    console.log(data);
+//    socket.emit('my other event', { your: 'data' });
+//  });
+  $(window).on('beforeunload',function () {
+      socket.emit('disconnect', {reason:'user disconnected'});
   });
 
  
