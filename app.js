@@ -4,11 +4,24 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
+var socket_io = require('socket.io');
 var index = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
+
+
+var io = socket_io();
+//io.set('transports', ['websocket']);
+app.io = io;
+
+require('./socket')(app);
+
+app.get('/', function (req, res) {
+  
+  res.sendFile(__dirname + '/frontend/home.html');
+  
+});
 
 //db connection
 var db=require('./config/db');
@@ -25,7 +38,7 @@ app.use('/storage/product_images',express.static('storage/product_images'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'libs')));
 
 //CORS protection (Cross origin request serve)
 app.use(function (req,res,next) {
@@ -36,13 +49,14 @@ app.use(function (req,res,next) {
         req.header('Access-Control-Allow-Origin', 'PUT,POST,PATCH,GET,DELETE');
         return res.status(200).json({});
     }
+    'use strict';
+    req.io=io;
     next();
 });
 
 //Routes middleware
 app.use('/', index);
 app.use('/', users);
-
 
 
 // catch 404 and forward to error handler
@@ -62,5 +76,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
 
 module.exports = app;

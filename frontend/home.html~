@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <title>The Bidding page</title>
-    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="../libs/bootstrap.min.css">
 </head>
 <body>
 
@@ -35,8 +35,8 @@
     <div class="col-md-3"></div>
     </div>
 </div>
-<script src="jquery.js"></script>
-
+<script src="../libs/jquery.js"></script>
+<script src="../libs/socket/dist/socket.io.js"></script>
 <script>
     $(document).ready(function(){
 
@@ -45,19 +45,6 @@
 
 
 </script>
-
-<script src="../socket.io/socket.io.js"></script>
-<script>
-  var socket = io.connect('http://localhost:3000');
-  
-  socket.on('news', function (data) {
-    console.log(data);
-    socket.emit('my other event', { your: 'data' });
-  });
-
- 
-</script>   
-
 
 
 
