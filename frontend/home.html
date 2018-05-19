@@ -34,6 +34,8 @@
     </div>
     <div class="col-md-3"></div>
     </div>
+
+    <button id="changeroom">change room</button>
 </div>
 <script src="jquery.js"></script>
 
@@ -42,14 +44,49 @@
 <script>
   var socket = io.connect('http://localhost:3000');
 
-//  socket.on('news', function (data) {
-//    console.log(data);
-//    socket.emit('my other event', { your: 'data' });
-//  });
-  $(window).on('beforeunload',function () {
-      socket.emit('disconnect', {reason:'user disconnected'});
-  });
+    socket.emit('newuser', {
+        username: 'tarun'
+    });
 
+    socket.on('user joined',function(data){
+        console.log('a new user '+data.username+" joined in "+data.roomname);
+        $('#curr_bid_amount').val(data.newbid);
+        $('#curr_bid_user').val(data.newbidder);
+    });
+
+    socket.on('user left',function(data){
+        console.log('the user named '+data.username+" has left the room "+data.previousroom);
+    })
+
+    // $('#changeroom').on('click',function(){
+    //     socket.emit('changeroom',{
+    //         roomname: "BIDDINGroom2",
+    //         username:'tarun'
+    //     });
+    // });
+
+    $('#bid').on('click',function(){
+        var bidamt = $('#curr_bid_amount').val();
+        var prev_bidder = $('#curr_bid_user').val();
+        if(bidamt !='' && prev_bidder !=''){
+            console.log("inside if");
+            socket.emit('bid placed',{
+                prev_bidder : prev_bidder,
+                bidamt : bidamt,
+                curr_bidder : 'pranjal'
+            });
+        }
+    });
+
+    socket.on('bid updated',function(data){
+        console.log('inside bid updated');
+        $('#curr_bid_amount').val(data.new_bid_amt);
+        $('#curr_bid_user').val(data.bidholder);
+    });
+
+    socket.on('late bid',function(data){
+        console.log(data.reason);
+    })
  
 </script>   
 
