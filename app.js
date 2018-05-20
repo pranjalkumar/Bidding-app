@@ -8,14 +8,26 @@ var socket_io = require('socket.io');
 var index = require('./routes/index');
 var users = require('./routes/users');
 
+var CronJob = require('cron').CronJob;
+
+
+  
+
 var app = express();
 
 
 var io = socket_io();
 //io.set('transports', ['websocket']);
 app.io = io;
+var flag=0;
+new CronJob('* * 4 * * *', function(){
+  if(flag==0)
+    require('./socket')(app);
+  flag=1;
+ },null,true);
 
-require('./socket')(app);
+
+
 
 app.get('/', function (req, res) {
   
