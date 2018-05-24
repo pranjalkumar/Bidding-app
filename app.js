@@ -20,7 +20,7 @@ var io = socket_io();
 //io.set('transports', ['websocket']);
 app.io = io;
 var flag=0;
-new CronJob('* * 4 * * *', function(){
+new CronJob('* * 16 * * *', function(){
   if(flag==0)
     require('./socket')(app);
   flag=1;
