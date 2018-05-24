@@ -1,9 +1,11 @@
+//import { setTimeout } from 'timers';
+
 
 
 'use strict';
 var mongoose=require('mongoose');
 var Products=require('../models/product').Products;
-
+var sleep = require('sleep');
 var allproducts= new Array();
 
 function initialize(){
@@ -24,13 +26,14 @@ function initialize(){
 
 var total_products;
 var product_no=0;
-var newbid, newbidder , product_description, product_image , product_name;
+var newbid, newbidder , product_id , product_description, product_image , product_name;
 var initializepromise = initialize();
 initializepromise.then(function(result){
     allproducts = result;
     console.log("allprod"+allproducts);
     total_products=allproducts.length;
     newbid = allproducts[product_no].base_price ;
+    product_id = allproducts[product_no]._id;
     newbidder = '' ;
     product_image= allproducts[product_no].productImage; 
     product_description= allproducts[product_no].description;
@@ -116,16 +119,32 @@ var ioEvents = function(io) {
   
 
     setInterval(function(){
+        console.log("timeinterval : "+timelimit);
         timelimit--;
-        if(timelimit<0){
+        
+        if(timelimit<0 && product_no<total_products){
+            const doc = {
+                sold_date: Date.now(),
+                 sold_to: newbidder,
+                final_price: newbid
+              };
+
+              Products.update({_id : product_id}, doc , function(err,raw){
+                  if(err){
+                      console.log(err);
+                  }
+                  else{
+                      console.log(raw);
+                  }
+              });
             product_no++;
-            if(product_no<total_products)
-            {
+           if(product_no<total_products){
                 newbid = allproducts[product_no].base_price;
                 newbidder = '';
                 product_name = allproducts[product_no].name;
                 product_description = allproducts[product_no].description;
                 product_image = allproducts[product_no].productImage;
+                product_id = allproducts[product_no]._id;
                 io.sockets.emit('changeprod',{
                     bidamt : newbid ,
                     bidder: newbidder,
@@ -133,14 +152,24 @@ var ioEvents = function(io) {
                     prod_desc : product_description,
                     prod_image : product_image
                 });
-                last_bid_time=new Date().getTime();
-                timelimit=10;
+                
+                timelimit=10;                
+                
+                setTimeout(function(){
+                    sleep.sleep(12);
+                    timelimit=10;
+                    last_bid_time=new Date().getTime();
+                },2000);
+               
             }
-            else{
-                io.sockets.emit('end of auction',{
-                    message : 'all products have finished.'
-                });
-            }
+                
+
+           
+        }
+        else if (product_no==total_products){
+            io.sockets.emit('end of auction',{
+                message : 'all products have finished.'
+            });
         }
     },1000);
 
