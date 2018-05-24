@@ -46,6 +46,7 @@
 <script>
   var socket = io.connect('http://localhost:3000');
 
+    console.log(window.location);
     socket.emit('newuser', {
         username: 'tarun'
     });
@@ -98,16 +99,13 @@
         console.log(data.prod_image);
         $('#product_description').html(data.prod_desc);
         $('#curr_bid_user').val(data.bidder);
-        setTimeout(function(){
-            $('#tellme').val('30 sec passed');
-            console.log("30 sec passed");
-        },30000);
+       
     });
 
     socket.on('first_conn',function(data){
         $('#curr_bid_amount').val(data.bidamt);
         $('#curr_bid_user').val(data.bidder);
-        $('#product_image').src=data.prod_image;
+        $('#product_image').attr('src',data.prod_image);
         console.log(data.prod_image);
         $('#product_description').html(data.prod_desc);
         $('#curr_bid_user').val(data.bidder);
